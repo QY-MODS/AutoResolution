@@ -1,13 +1,4 @@
-
-
-void OnMessage(SKSE::MessagingInterface::Message* message) {
-    if (message->type == SKSE::MessagingInterface::kDataLoaded) {
-        // Start
-    }
-    if (message->type == SKSE::MessagingInterface::kNewGame || message->type == SKSE::MessagingInterface::kPostLoadGame) {
-        // Post-load
-    }
-}
+#include "Settings.h"
 
 static void SetupLog() {
     auto logsFolder = SKSE::log::log_directory();
@@ -33,5 +24,7 @@ SKSEPluginLoad(const SKSE::LoadInterface *skse) {
     SetupLog();
     logger::info("Plugin loaded");
     SKSE::Init(skse);
+    GetINISettings();
+    ReadWriteDisplayTweaksINI();
     return true;
 }
