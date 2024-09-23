@@ -2,3 +2,4 @@
 
 void GetINISettings();
 void ReadWriteDisplayTweaksINI();
+void ReadWriteDisplayTweaksINI(const char* filepath);

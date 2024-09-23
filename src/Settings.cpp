@@ -37,18 +37,27 @@ void GetINISettings() {
     ini.SaveFile(std::format("Data/SKSE/Plugins/{}.ini", Utilities::mod_name).c_str());
 
     logger::info("INI file updated.");
+}
+void ReadWriteDisplayTweaksINI()
+{   
+	if (std::filesystem::exists(Utilities::display_tweaks_custom_ini)) {
+		logger::info("SSEDisplayTweaks_custom.ini exists.");
+		return ReadWriteDisplayTweaksINI(Utilities::display_tweaks_custom_ini.c_str());
+	}
+
+    if (std::filesystem::exists(Utilities::display_tweaks_ini)) {
+		logger::info("SSEDisplayTweaks.ini exists.");
+		return ReadWriteDisplayTweaksINI(Utilities::display_tweaks_ini.c_str());
+	}
+	logger::info("SSEDisplayTweaks.ini does not exist.");
+	return;
 };
 
-void ReadWriteDisplayTweaksINI() {
+void ReadWriteDisplayTweaksINI(const char* filepath) {
     // first make sure the INI file exists
-    const bool iniExists = std::filesystem::exists("Data/SKSE/Plugins/SSEDisplayTweaks.ini");
-    if (!iniExists) {
-		logger::error("SSEDisplayTweaks.ini does not exist.");
-		return;
-	}
     CSimpleIniA ini;
     ini.SetUnicode();
-    ini.LoadFile("Data/SKSE/Plugins/SSEDisplayTweaks.ini");
+    ini.LoadFile(filepath);
     
     // get user's actual windows display resolution
     auto displayWidth = GetSystemMetrics(SM_CXSCREEN);
@@ -66,5 +75,5 @@ void ReadWriteDisplayTweaksINI() {
     logger::info("Resolution: {}", resolutions);
     // set the Display Tweaks resolution to the user's display resolution
     ini.SetValue("Render", "Resolution", windows_resolution.c_str());
-    ini.SaveFile("Data/SKSE/Plugins/SSEDisplayTweaks.ini");
+    ini.SaveFile(filepath);
 };
